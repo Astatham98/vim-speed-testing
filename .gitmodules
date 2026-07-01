@@ -1,6 +1,3 @@
-[submodule "vision_mamba"]
-	path = vision_mamba
-	url = https://github.com/doodleima/vision_mamba
 [submodule "VMamba"]
 	path = VMamba
 	url = https://github.com/MzeroMiko/VMamba.git
