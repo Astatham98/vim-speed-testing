@@ -4,5 +4,4 @@
 [submodule "MambaVision"]
 	path = MambaVision
 	url = https://github.com/NVlabs/MambaVision.git
-[submodule "Vim"]
-	path = Vim
+
