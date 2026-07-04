@@ -558,10 +558,13 @@ def vim_tiny_patch16_224_bimambav2_final_pool_mean_abs_pos_embed_with_midclstok_
         patch_size=16, embed_dim=192, depth=24, rms_norm=True, residual_in_fp32=True, fused_add_norm=True, final_pool_type='mean', if_abs_pos_embed=True, if_rope=False, if_rope_residual=False, bimamba_type="v2", if_cls_token=True, if_divide_out=True, use_middle_cls_token=True, **kwargs)
     model.default_cfg = _cfg()
     if pretrained:
-        checkpoint = torch.hub.load_state_dict_from_url(
-            url="to.do",
-            map_location="cpu", check_hash=True
-        )
+        if kwargs.get('ckpt_path', None) is not None and 'http' in kwargs.get('ckpt_path', None):
+            checkpoint = torch.hub.load_state_dict_from_url(
+                url=kwargs.get('ckpt_path', None),
+                map_location="cpu", check_hash=True
+            )
+        else:
+            checkpoint = torch.load(kwargs.get('ckpt_path', None), map_location="cpu")
         model.load_state_dict(checkpoint["model"])
     return model
 
