@@ -551,6 +551,16 @@ class VisionMamba(nn.Module):
             x = x.max(dim=1)[0]
         return x
 
+def load_pretrained(model, **kwargs):
+    if kwargs.get('ckpt_path', None) is not None and 'http' in kwargs.get('ckpt_path', None):
+            checkpoint = torch.hub.load_state_dict_from_url(
+                url=kwargs.get('ckpt_path', None),
+                map_location="cpu", check_hash=True
+            )
+    else:
+        checkpoint = torch.load(kwargs.get('ckpt_path', None), map_location="cpu")
+    model.load_state_dict(checkpoint["model"])
+    return model
 
 @register_model
 def vim_tiny_patch16_224_bimambav2_final_pool_mean_abs_pos_embed_with_midclstok_div2(pretrained=False, **kwargs):
@@ -558,15 +568,9 @@ def vim_tiny_patch16_224_bimambav2_final_pool_mean_abs_pos_embed_with_midclstok_
         patch_size=16, embed_dim=192, depth=24, rms_norm=True, residual_in_fp32=True, fused_add_norm=True, final_pool_type='mean', if_abs_pos_embed=True, if_rope=False, if_rope_residual=False, bimamba_type="v2", if_cls_token=True, if_divide_out=True, use_middle_cls_token=True, **kwargs)
     model.default_cfg = _cfg()
     if pretrained:
-        if kwargs.get('ckpt_path', None) is not None and 'http' in kwargs.get('ckpt_path', None):
-            checkpoint = torch.hub.load_state_dict_from_url(
-                url=kwargs.get('ckpt_path', None),
-                map_location="cpu", check_hash=True
-            )
-        else:
-            checkpoint = torch.load(kwargs.get('ckpt_path', None), map_location="cpu")
-        model.load_state_dict(checkpoint["model"])
+        return load_pretrained(model, **kwargs)
     return model
+
 
 @register_model
 def vim_tiny_patch16_stride8_224_bimambav2_final_pool_mean_abs_pos_embed_with_midclstok_div2(pretrained=False, **kwargs):
@@ -574,11 +578,7 @@ def vim_tiny_patch16_stride8_224_bimambav2_final_pool_mean_abs_pos_embed_with_mi
         patch_size=16, stride=8, embed_dim=192, depth=24, rms_norm=True, residual_in_fp32=True, fused_add_norm=True, final_pool_type='mean', if_abs_pos_embed=True, if_rope=False, if_rope_residual=False, bimamba_type="v2", if_cls_token=True, if_divide_out=True, use_middle_cls_token=True, **kwargs)
     model.default_cfg = _cfg()
     if pretrained:
-        checkpoint = torch.hub.load_state_dict_from_url(
-            url="to.do",
-            map_location="cpu", check_hash=True
-        )
-        model.load_state_dict(checkpoint["model"])
+        return load_pretrained(model, **kwargs)
     return model
 
 @register_model
@@ -587,11 +587,7 @@ def vim_small_patch16_224_bimambav2_final_pool_mean_abs_pos_embed_with_midclstok
         patch_size=16, embed_dim=384, depth=24, rms_norm=True, residual_in_fp32=True, fused_add_norm=True, final_pool_type='mean', if_abs_pos_embed=True, if_rope=False, if_rope_residual=False, bimamba_type="v2", if_cls_token=True, if_divide_out=True, use_middle_cls_token=True, **kwargs)
     model.default_cfg = _cfg()
     if pretrained:
-        checkpoint = torch.hub.load_state_dict_from_url(
-            url="to.do",
-            map_location="cpu", check_hash=True
-        )
-        model.load_state_dict(checkpoint["model"])
+        return load_pretrained(model, **kwargs)
     return model
 
 @register_model
@@ -600,11 +596,7 @@ def vim_small_patch16_stride8_224_bimambav2_final_pool_mean_abs_pos_embed_with_m
         patch_size=16, stride=8, embed_dim=384, depth=24, rms_norm=True, residual_in_fp32=True, fused_add_norm=True, final_pool_type='mean', if_abs_pos_embed=True, if_rope=False, if_rope_residual=False, bimamba_type="v2", if_cls_token=True, if_divide_out=True, use_middle_cls_token=True, **kwargs)
     model.default_cfg = _cfg()
     if pretrained:
-        checkpoint = torch.hub.load_state_dict_from_url(
-            url="to.do",
-            map_location="cpu", check_hash=True
-        )
-        model.load_state_dict(checkpoint["model"])
+        return load_pretrained(model, **kwargs)
     return model
     
 @register_model
@@ -613,9 +605,5 @@ def vim_base_patch16_224_bimambav2_final_pool_mean_abs_pos_embed_with_middle_cls
         patch_size=16, embed_dim=768, d_state=16, depth=24, rms_norm=True, residual_in_fp32=True, fused_add_norm=True, final_pool_type='mean', if_abs_pos_embed=True, if_rope=False, if_rope_residual=False, bimamba_type="v2", if_cls_token=True, if_devide_out=True, use_middle_cls_token=True, **kwargs)
     model.default_cfg = _cfg()
     if pretrained:
-        checkpoint = torch.hub.load_state_dict_from_url(
-            url="to.do",
-            map_location="cpu", check_hash=True
-        )
-        model.load_state_dict(checkpoint["model"])
+        return load_pretrained(model, **kwargs)
     return model

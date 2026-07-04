@@ -1,36 +1,14 @@
 import argparse
-import datetime
 import numpy as np
 import time
 import torch
 import torch.backends.cudnn as cudnn
-import json
-
-from pathlib import Path
-
-from timm.data import Mixup
 from timm.models import create_model
-from timm.loss import LabelSmoothingCrossEntropy, SoftTargetCrossEntropy
-from timm.scheduler import create_scheduler
-from timm.optim import create_optimizer
-from timm.utils import NativeScaler, get_state_dict, ModelEma
-
 from datasets import build_dataset
-from engine import train_one_epoch, evaluate
-from losses import DistillationLoss
-from samplers import RASampler
-from augment import new_data_aug_generator
-
+from engine import evaluate
 from contextlib import suppress
-
-import models_mamba
-
 import utils
-
-# log about
-import mlflow
-
-
+import models_mamba
 
 def load_dataload(dataset_val, sampler_val, batch_size, num_workers, pin_mem):
     data_loader_val = torch.utils.data.DataLoader(
@@ -103,4 +81,7 @@ if __name__ == '__main__':
     
     # model = load_model_from_checkpoint(model.copy(), args.ckpt, device)
 
+    start = time.time()
     evaluate_model(model, data_loader_val, dataset_val, device, amp_autocast)
+    end = time.time() - start
+    print(f"Evaluation time took: {end:.2f} seconds, for images of size {args.input_size}x{args.input_size} and batch size {args.batch_size}.")
